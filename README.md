@@ -11,14 +11,15 @@ languages like Markdown or LaTeX.
 Features
 --------
 
-The plugin provides custom `p` and `P` command handlers for normal, insert and visual modes. Users
-are expected to invoke these handlers to trigger the following workflow:
+The plugin provides `p` and `P` handlers for normal, insert and visual editing modes. Their
+invocation triggers the following workflow:
 
-1. Plugin collects some information about the paste action:
-   * Type of the file
-   * The type of the content to be pasted. Currently the plugin distinguishes normal text, URLs and
-     images (either `xclip` or `wl-paste` is required for images).
-   * Possible text for titles or annotations (active visual selection text)
+1. Plugin collects information about the paste action:
+   * Type of the current file
+   * Type of the content to be pasted. Currently the plugin distinguishes:
+     + HTTP(s) URLs.
+     + Image blobs (either `xclip` or `wl-paste` is required for this).
+   * Possible text for annotations (e.g. gets the active visual selection)
 2. A substitution pattern is requested from the pre-configured dictionary. Example of the markdown
    pattern for images: `![%T%C](%U)` where `%T` stands for title, `%U` - for the URL and `%C` marks
    the cursor position after the paste is complete.
