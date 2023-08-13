@@ -47,7 +47,7 @@ Configuration
      call g:pastething#pattern_set('markdown', g:pastething_type_url, "[%T%C](%U)")
      call g:pastething#pattern_set('markdown', g:pastething_type_img, "![%T%C](%U)")
      ```
-   *  `./vim/ftplugin/tex.vim`:
+   * `./vim/ftplugin/tex.vim`:
      ``` vim
      call g:pastething#pattern_set('tex', g:pastething_type_url, "\\href{%U}{%T%C}")
      ```
