@@ -28,7 +28,7 @@ are expected to invoke these handlers. The plugin then operates as follows:
 Installation
 ------------
 
-TODO (put `./vim` into the Vim runtime search path by using your favorite Vim plugin manager).
+Put `./vim` into the Vim runtime search path by using your favorite Vim plugin manager.
 
 Configuration
 -------------
