@@ -11,19 +11,20 @@ languages like Markdown or LaTeX.
 Features
 --------
 
-The plugin provides custom `p` and `P` command handlers for normal, insert and visual mode. Users
-are expected to invoke these handlers. The plugin then operates as follows:
+The plugin provides custom `p` and `P` command handlers for normal, insert and visual modes. Users
+are expected to invoke these handlers to trigger the following workflow:
 
-1. Collects some information about the paste action:
-   * The type of the content to be pasted. Currently the plugin distinguishes normal text,
-     URLs and images (either `xclip` or `wl-paste` is required for images).
-   * Potential annotation text (active visual selection text)
-2. Maps the type of paste and the type of current file into the paste substitution pattern
-   configured by users. Example of markdown pattern for images: `![%T%C](%U)` where `%T` stands for
-   title, `%U` - for the URL and `%C` marks the cursor position after the paste is complete.
-3. Substitutes the collected information into the pattern and actually pastes the result into the
-   file. For images the plugin saves the actual image into a pre-configured directory and puts the
-   path to the new file into the pattern.
+1. Plugin collects some information about the paste action:
+   * Type of the file
+   * The type of the content to be pasted. Currently the plugin distinguishes normal text, URLs and
+     images (either `xclip` or `wl-paste` is required for images).
+   * Possible text for titles or annotations (active visual selection text)
+2. A substitution pattern is requested from the pre-configured dictionary. Example of the markdown
+   pattern for images: `![%T%C](%U)` where `%T` stands for title, `%U` - for the URL and `%C` marks
+   the cursor position after the paste is complete.
+3. Finally, the plugin substitutes the information into the pattern and actually pastes
+   the result into the buffer. For images the plugin saves blobs into a pre-configured
+   directory and puts the path to the new file into the pattern.
 
 Installation
 ------------
