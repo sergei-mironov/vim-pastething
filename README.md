@@ -5,8 +5,8 @@ vim: spell
 Pastething
 ==========
 
-This repository contains a VIM paste (yank) pre-processing plugin suitable for editing text markup
-languages like Markdown or LaTeX.
+This repository contains a VIM paste pre-processing plugin suitable for editing text markup like
+Markdown or LaTeX.
 
 Features
 --------
