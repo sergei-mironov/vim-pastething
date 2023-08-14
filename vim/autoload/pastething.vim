@@ -92,8 +92,13 @@ fun! pastething#paste_normal_pattern(cmd, patterns) range
   let val = getreg(reg)
   if rt ==# 'v'
     let exp = pastething#expand_pattern(val, a:patterns, '')
+    if g:pastething_insert_leading_spaces == 1
+      let pos = getcurpos()
+      if pos[2] == 1 && pos[4] != pos[2]
+        let exp["res"] = repeat(' ',pos[4]-1).exp["res"]
+      endif
+    endif
     call setreg(reg, exp["res"])
-    let pos = getcurpos()
     execute "normal! \"".reg.cmd
     if exp['coff']>=0
       call setpos('.', [pos[0],pos[1],pos[2]+exp['coff']+cadd,pos[3]])
@@ -136,13 +141,14 @@ endfun
 fun! pastething#paste_insert_pattern(cmd, patterns) range
   let pos = getcurpos()
   let cmd = a:cmd
-  if g:pastething_insert_eol == 1
-    if pos[2] != pos[4]
-      " Cursor is after-end-of-line
-      let cmd = 'p'
-    endif
+  if g:pastething_insert_eol == 1 && pos[2] != pos[4]
+    " Cursor is after the end-of-line
+    let cmd = 'p'
   endif
   let exp = pastething#paste_normal_pattern(cmd, a:patterns)
+  if g:pastething_insert_eol == 1 && pos[2] != pos[4]
+    execute "normal $"
+  endif
   return exp
 endfun
 
