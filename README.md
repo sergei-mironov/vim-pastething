@@ -35,7 +35,7 @@ Put the repository into the Vim runtime search path by using your favorite plugi
 Configuration
 -------------
 
-1. Overwrite [global options](./vim/plugin/pastething.vim):
+1. Overwrite [global options](./plugin/pastething.vim):
    ``` vim
    let g:pastething_insert_eol = 1
    let g:pastething_image_enabled = 1
@@ -45,12 +45,12 @@ Configuration
 
 2. Setup the substitution patterns for the file types of interest.
    Example:
-   * `./vim/ftplugin/markdown.vim`:
+   * `./ftplugin/markdown.vim`:
      ``` vim
      call g:pastething#pattern_set('markdown', g:pastething_type_url, "[%T%C](%U)")
      call g:pastething#pattern_set('markdown', g:pastething_type_img, "![%T%C](%U)")
      ```
-   * `./vim/ftplugin/tex.vim`:
+   * `./ftplugin/tex.vim`:
      ``` vim
      call g:pastething#pattern_set('tex', g:pastething_type_url, "\\href{%U}{%T%C}")
      ```
