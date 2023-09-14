@@ -1,12 +1,35 @@
 
-fun! pastething#image#check()
-  if $WAYLAND_DISPLAY != "" && executable('wl-copy')
-    let system_targets = "wl-paste --list-types"
-  elseif $DISPLAY != '' && executable('xclip')
-    let system_targets = 'xclip -selection clipboard -t TARGETS -o'
+fun! pastething#image#exepath(path, name) abort
+  if a:path != v:null && len(a:path)>0
+    return a:path
+  elseif executable(a:name)
+    return exepath(a:name)
   else
-    echoerr 'pastething: Needs xclip in X11 or wl-clipboard ' .
-          \ 'in Wayland to check for clipboard images'
+    return v:null
+  endif
+endfun
+
+fun! pastething#image#getcliptools() abort
+  let system_targets = v:null
+  let system_clip = v:null
+  if $WAYLAND_DISPLAY != ""
+    let p = pastething#image#exepath(g:pastething_wlpaste_path, 'wl-paste')
+    if p
+      let system_targets = p . " --list-types"
+      let system_clip = p . " --no-newline --type %s > %s"
+    endif
+  elseif $DISPLAY != ''
+    let p = pastething#image#exepath(g:pastething_xclip_path, 'xclip')
+    let system_targets = p .' -selection clipboard -t TARGETS -o'
+    let system_clip = p . ' -selection clipboard -t %s -o > %s'
+  endif
+  return [system_targets, system_clip]
+endfun
+
+fun! pastething#image#check() abort
+  let [system_targets, system_clip] = pastething#image#getcliptools()
+  if system_clip == v:null || system_targets == v:null
+    echoerr 'Needs xclip in X11 or wl-clipboard in Wayland.'
     return 0
   endif
   let targets = filter(systemlist(system_targets), 'v:val =~# ''image/''')
@@ -29,21 +52,15 @@ fun! pastething#image#create_dir()
   return fnameescape(dir)
 endf
 
-
-fun! pastething#image#save(imgdir, tmpname) abort
-  if $WAYLAND_DISPLAY != "" && executable('wl-copy')
-    let system_targets = "wl-paste --list-types"
-    let system_clip = "wl-paste --no-newline --type %s > %s"
-  elseif $DISPLAY != '' && executable('xclip')
-    let system_targets = 'xclip -selection clipboard -t TARGETS -o'
-    let system_clip = 'xclip -selection clipboard -t %s -o > %s'
-  else
+fun! pastething#image#save(imgdir, tmpname, def) abort
+  let [system_targets, system_clip] = pastething#image#getcliptools()
+  if system_clip == v:null || system_targets == v:null
     echoerr 'Needs xclip in X11 or wl-clipboard in Wayland.'
-    return 1
+    return a:def
   endif
 
   let targets = filter(systemlist(system_targets), 'v:val =~# ''image/''')
-  if empty(targets) | return 1 | endif
+  if empty(targets) | return a:def | endif
 
   if index(targets, "image/png") >= 0
     " Use PNG if available

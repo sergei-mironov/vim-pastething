@@ -68,7 +68,8 @@ fun! pastething#expand_pattern(val, patterns, hint) range
     let pattern = substitute(pattern, "%T", obj["title"], '')
     let pattern = substitute(pattern, "%U",
                 \            pastething#image#save(pastething#image#create_dir(),
-                \                                pastething#image#name_input()), '')
+                \                                  pastething#image#name_input(),
+                \                                  "<invalid_image_path>"), '')
     let coff = pastething#pattern_cursor_offset(pattern)
     let res = substitute(pattern, "%C", '', '')
     return {'res':res, 'coff':coff}

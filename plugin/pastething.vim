@@ -10,3 +10,9 @@ endif
 if !exists("g:pastething_image_dir")
   let g:pastething_image_dir = 'img'
 endif
+if !exists("g:pastething_xclip_path")
+  let g:pastething_xclip_path = v:null
+endif
+if !exists("g:pastething_wlpaste_path")
+  let g:pastething_wlpaste_path = v:null
+endif
