@@ -64,3 +64,8 @@ Configuration
    ```
 
 
+References
+----------
+
+* This plugin is inspired by [img-paste](https://github.com/img-paste-devs/img-paste.vim)
+* [clipboard-image.nvim](https://github.com/ekickx/clipboard-image.nvim)
