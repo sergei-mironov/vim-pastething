@@ -20,7 +20,7 @@ invocation triggers the following workflow:
      + HTTP(s) URLs.
      + Image blobs (either `xclip` or `wl-paste` is required for this).
    * Possible text for annotations (e.g. gets the active visual selection)
-2. A substitution pattern is requested from the pre-configured dictionary. Example of the markdown
+2. Substitution pattern is requested from the pre-configured dictionary. Example of the markdown
    pattern for images: `![%T%C](%U)` where `%T` stands for title, `%U` - for the URL and `%C` marks
    the cursor position after the paste is complete.
 3. Finally, the plugin substitutes the information into the pattern and actually pastes
@@ -30,7 +30,7 @@ invocation triggers the following workflow:
 Installation
 ------------
 
-Put `./vim` into the Vim runtime search path by using your favorite Vim plugin manager.
+Put the repository into the Vim runtime search path by using your favorite plugin manager.
 
 Configuration
 -------------
@@ -39,10 +39,11 @@ Configuration
    ``` vim
    let g:pastething_insert_eol = 1
    let g:pastething_image_enabled = 1
-   let g:pastething_image_dir = 'img'
+   let g:pastething_xclip_path = '/path/to/xclip' " `xclip` to extract images from clipboard
+   let g:pastething_image_dir = 'img' " Save extracted images into the `./img` directory
    ```
 
-2. Setup the patterns for file types of interest.
+2. Setup the substitution patterns for the file types of interest.
    Example:
    * `./vim/ftplugin/markdown.vim`:
      ``` vim
