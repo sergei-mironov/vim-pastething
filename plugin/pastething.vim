@@ -1,5 +1,8 @@
-if !exists("g:pastething_insert_eol")
-  let g:pastething_insert_eol = 1
+if !exists("g:pastething_insert_after_eol_move_right")
+  let g:pastething_insert_after_eol_move_right = 0
+endif
+if !exists("g:pastething_insert_after_eol_command")
+  let g:pastething_insert_after_eol_command = 'p'
 endif
 if !exists("g:pastething_insert_leading_spaces")
   let g:pastething_insert_leading_spaces = 1

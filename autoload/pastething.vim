@@ -140,14 +140,17 @@ fun! pastething#paste_visual_pattern(cmd, patterns) range
 endfun
 
 fun! pastething#paste_insert_pattern(cmd, patterns) range
+  if exists("g:pastething_insert_eol")
+    throw "Variable g:pastething_insert_eol is no longer supported"
+  endif
   let pos = getcurpos()
   let cmd = a:cmd
-  if g:pastething_insert_eol == 1 && pos[2] != pos[4]
-    " Cursor is after the end-of-line
-    let cmd = 'p'
+  if pos[2] != pos[4]
+    let cmd = g:pastething_insert_after_eol_command
   endif
   let exp = pastething#paste_normal_pattern(cmd, a:patterns)
-  if g:pastething_insert_eol == 1 && pos[2] != pos[4]
+  if g:pastething_insert_after_eol_move_right == 1 && pos[2] != pos[4]
+    " Move cursor is after the end-of-line
     execute "normal $"
   endif
   return exp

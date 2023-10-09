@@ -37,11 +37,14 @@ Configuration
 
 1. Overwrite [global options](./plugin/pastething.vim):
    ``` vim
-   let g:pastething_insert_eol = 1
+   let g:pastething_insert_after_eol_move_right = 0
+   let g:pastething_insert_after_eol_command = 'p'
    let g:pastething_image_enabled = 1
    let g:pastething_xclip_path = '/path/to/xclip' " `xclip` to extract images from clipboard
    let g:pastething_image_dir = 'img' " Save extracted images into the `./img` directory
    ```
+   Note: `g:pastething_insert_eol` is replaced with the top two variables listed above.
+
 
 2. Setup the substitution patterns for the file types of interest.
    Example:
