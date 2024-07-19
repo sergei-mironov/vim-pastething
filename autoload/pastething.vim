@@ -2,11 +2,13 @@ if exists("g:loaded_vim_pastething")
   finish
 endif
 
-let g:pastething_patterns = {}
-
 let g:pastething_type_url = "url"
 let g:pastething_type_img = "img"
 let g:pastething_type_other = "other"
+
+if !exists("g:pastething_ftpatterns")
+  let g:pastething_ftpatterns = {}
+endif
 
 fun! pastething#get_visual_selection() range
   let [line_start, column_start] = getcharpos("'<")[1:2]
@@ -157,24 +159,39 @@ fun! pastething#paste_insert_pattern(cmd, patterns) range
 endfun
 
 fun! pastething#pattern_set(ftype, vtype, pattern)
-  let ftdict = get(g:pastething_patterns, a:ftype, {})
+  let ftdict = get(g:pastething_ftpatterns, a:ftype, {})
   let ftdict[a:vtype] = a:pattern
-  let g:pastething_patterns[a:ftype] = ftdict
+  let g:pastething_ftpatterns[a:ftype] = ftdict
+endfun
+
+fun! pastething#pattern_set_buffer(vtype, pattern)
+  if ! exists("b:pastething_patterns")
+    let b:pastething_patterns = {}
+  endif
+  let b:pastething_patterns[a:vtype] = a:pattern
+endfun
+
+fun! pastething#patterns_get()
+  if exists("b:pastething_patterns")
+    return b:pastething_patterns
+  else
+    return get(g:pastething_ftpatterns, &filetype, {})
+  endif
 endfun
 
 fun! pastething#paste_normal(cmd) range
   call pastething#paste_normal_pattern(
-        \ a:cmd, get(g:pastething_patterns, &filetype, {}))
+        \ a:cmd, pastething#patterns_get())
 endfun
 
 fun! pastething#paste_insert(cmd) range
   call pastething#paste_insert_pattern(
-        \ a:cmd, get(g:pastething_patterns, &filetype, {}))
+        \ a:cmd, pastething#patterns_get())
 endfun
 
 fun! pastething#paste_visual(cmd) range
   call pastething#paste_visual_pattern(
-        \ a:cmd, get(g:pastething_patterns, &filetype, {}))
+        \ a:cmd, pastething#patterns_get())
 endfun
 
 let g:loaded_vim_pastething = 1
