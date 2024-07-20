@@ -86,25 +86,29 @@ fun! pastething#paste_normal_pattern(cmd, patterns) range
     let reg = "+"
   endif
   let cmd = a:cmd
-  if cmd ==# "p"
-    let cadd = 1
-  else
-    let cadd = 0
-  endif
   let rt = getregtype(reg)
   let val = getreg(reg)
   if rt ==# 'v'
     let exp = pastething#expand_pattern(val, a:patterns, '')
+    let pos = getcurpos()
+    let paste_start = pos[2]
     if g:pastething_insert_leading_spaces == 1
-      let pos = getcurpos()
-      if pos[2] == 1 && pos[4] != pos[2]
-        let exp["res"] = repeat(' ',pos[4]-1).exp["res"]
+      if paste_start == 1 && paste_start != pos[4]
+        if pos[4] < v:maxcol
+          let exp["res"] = repeat(' ',pos[4]-1).exp["res"]
+          let paste_start = pos[4]
+        endif
+      else
+        if paste_start > 1 && cmd ==# "p"
+          let paste_start = paste_start + 1
+        endif
       endif
     endif
     call setreg(reg, exp["res"])
     execute "normal! \"".reg.cmd
     if exp['coff']>=0
-      call setpos('.', [pos[0],pos[1],pos[2]+exp['coff']+cadd,pos[3]])
+      " echomsg "pos=".string(pos)."; paste_start=".string(paste_start)
+      call setpos('.', [pos[0],pos[1],paste_start+exp['coff'],pos[3]])
     endif
     call setreg(reg ,val)
   else
@@ -195,5 +199,4 @@ fun! pastething#paste_visual(cmd) range
 endfun
 
 let g:loaded_vim_pastething = 1
-
 
