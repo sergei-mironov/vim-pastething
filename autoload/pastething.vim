@@ -176,26 +176,36 @@ fun! pastething#pattern_set_buffer(vtype, pattern)
 endfun
 
 fun! pastething#patterns_get()
+  return get(g:pastething_ftpatterns, &filetype, {})
+endfun
+
+fun! pastething#patterns_has(key)
+  return get(get(g:pastething_ftpatterns, &filetype, {}), a:key, 0) != 0
+endfun
+
+fun! pastething#patterns_combine()
+  let patterns = get(g:pastething_ftpatterns, &filetype, {})
   if exists("b:pastething_patterns")
-    return b:pastething_patterns
-  else
-    return get(g:pastething_ftpatterns, &filetype, {})
+    for key in keys(b:pastething_patterns)
+      let patterns[key] = get(b:pastething_patterns, key, '')
+    endfor
   endif
+  return patterns
 endfun
 
 fun! pastething#paste_normal(cmd) range
   call pastething#paste_normal_pattern(
-        \ a:cmd, pastething#patterns_get())
+        \ a:cmd, pastething#patterns_combine())
 endfun
 
 fun! pastething#paste_insert(cmd) range
   call pastething#paste_insert_pattern(
-        \ a:cmd, pastething#patterns_get())
+        \ a:cmd, pastething#patterns_combine())
 endfun
 
 fun! pastething#paste_visual(cmd) range
   call pastething#paste_visual_pattern(
-        \ a:cmd, pastething#patterns_get())
+        \ a:cmd, pastething#patterns_combine())
 endfun
 
 let g:loaded_vim_pastething = 1
